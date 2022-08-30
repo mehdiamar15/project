@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+        {% block breadcrumb %}
+        <li class="breadcrumb-item active">Records</li>
+        {% endblock %}
+
+        {% block content %}
+        {% if messages %}
+   
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <div id="form_errors">
+                {% for message in messages %}
+                <strong class="text-{{ message.tags }}">{{ message }}</strong><br>
+    
+                {% endfor %}
+            </div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}
+        <div class="alert alert-info alert-dismissible messages_div" style="display: none;" role="alert">
+            <div class="form_errors">
+              
+            </div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <br>
+        Use <code> | </code> to split domain and content, Example: 
+        <div class="card" style="width: 18rem;">
+            
+            <div class="card-header">
+                dom1.com|MS=ms68770762
+                dom2.com|MS=ms68770762
+            </div>
+          </div>
+          <br>
+          <br>
+          <br>
+          <br>
+        <!-- <textarea class="form-control" name ="areaa" id="exampleFormControlTextarea1" rows="3"></textarea> !-->
+       <!--<button type="submit" name="new_records" class="btn btn-success " value="add">New Records</button> !-->
+      <!-- <button type="submit" name="deleter_records" class="btn btn-danger"  value="delete" >Delete</button>  !-->
+       
+      
+     
+     
+      
+      
+      </form>
+      
+      <br>
+      <br>
+      <button type="submit" name="new_records" class="btn btn-success col-3 new_records" value="add"><i class="fa fa-gear"></i>  New Records </button>
+      <button type="submit" name="deleter_records" class="btn btn-danger deleter_records"  value="delete" ><i class="fa fa-gear"></i>  Delete </button></button> (with ajax )
+
+      
+      
+    
+  
+     
+      <script>
+
+$(".new_records, .deleter_records").click(function(){
+   let action = $(this).attr('name');
+    
+    if(action== "new_records"){
+        $(".new_records").text("")
+        $(".new_records").html("<i class='fa fa-gear fa-spin'></i>  Loading ...");
+    } 
+    else if(action== "deleter_records"){
+        $(".deleter_records").text("")
+        $(".deleter_records").html("<i class='fa fa-gear fa-spin'></i>  Loading ...");
+    }
+
+              
+              var idd = $(this).attr('cons-id');
+              var consultaion_name = $(this).attr('cons-name');
+              //
+              var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+          
+                $.ajax({ 
+                    type: "POST",
+                    url:'/recordsmng_ajax/',
+                    dataType: "json",
+                    //data: 'action':'new_records',
+                    data: {action: action,csrfmiddlewaretoken: csrfToken,
+                    records:$('[name="records"]').val(),
+                    type_record:$('[name="type_record"]').val(),
+                    TTL:$('[name="TTL"]').val()
+                    },
+  
+                    
+                    success: function(data){
+                 
+    if(action == "new_records"){
+        $(".new_records").text("")
+    $(".new_records").html("<i class='fa fa-gear'></i> New Records");
+    } 
+    else if(action == "deleter_records"){
+        $(".deleter_records").text("")
+    $(".deleter_records").html("<i class='fa fa-gear'></i> Delete");
+    }
+
+    $("[name='records']").removeClass("is-invalid").addClass("is-valid");
+    $("p").text("");
+    $("[name='TTL']").removeClass("is-invalid").addClass("is-valid"); 
+    $("[name='type_record']").removeClass("is-invalid").addClass("is-valid"); 
+    
+    $("p").text("");
+                        console.log(data.data)
+                        if(data.success){
+
+                         
+                            $('.messages_div').css('display','block');
+                            console.log(data.success)
+                            console.log(data.data)
+                            $(".form_errors").html(" ");
+                            $.each(data.data, function (i, m) {
+                $(".form_errors").append("<strong class='text-"+m.extra_tags+"''> - "+m.message+"</strong><br>");
+                
+            });
+
+                        }else{
+                            console.log(data.success)
+                            console.log(data.data)
+                            const obj = JSON.parse(data.data);
+                            for (const [name, value] of Object.entries(obj)){
+                                console.log(name, value);
+                            console.log(name);
+                            console.log(value[0].message);
+                            var $input = $("[name='"+ name +"']");
+                            $input.nextAll('p').empty();
+                            $input.after("<p style='color: red;'>" + value[0].message + "</p>");
+                            //$input.css("border", "2px solid red");
+                            $input.addClass("is-invalid");
+
+
+      
+                            }
+                        }
+                        
+
+                        /**/
+                        
+                      
+
+                        
+
+         
+                    }
+            
+
+                    }); 
+            
+            
+
+            });
+      </script>
+
+      {% endblock %}
+      
+        
+        
+        
+       
+        
+        

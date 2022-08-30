@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ board.name }} - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Boards</a></li>
+  <li class="breadcrumb-item active">{{ board_topics.name }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{% url 'new_topics' board_topics.pk %}" class="btn btn-primary">New topic</a>
+  </div>
+  
+    <table id="mytable" class="table" style="height:800%">
+    <thead class="thead-dark">
+      <tr>
+        <th>Topic</th>
+        <th>Starter</th>
+        <th>is superadmin</th>
+        <th>Replies</th>
+        <th>Views</th>
+        <th>Last Update</th>
+        <th>updateted by</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for topic in topics %}
+      {% if topic.created_by == user or user.is_superuser == True  %}
+        <tr>
+          <td><a href="{% url 'topic_posts' board_topics.pk topic.pk %}" >{{ topic.subject }}</a></td>
+          <td>{{ topic.created_by }}</td>
+          <td>{{ user.is_superuser }}</td>
+          
+          <td>{{topic.replies}}</td>
+          <td>{{topic.views}}</td>
+          <td>{{ topic.last_updated }}</td>
+          <td>{{ topic.updated_by }}</td>
+        </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

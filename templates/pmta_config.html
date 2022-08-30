@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+        {% block breadcrumb %} 
+        <li class="breadcrumb-item active">Pmta Manager</li>
+        {% endblock %}
+
+        {% block content %}  
+        {% if messages %}
+   
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <div id="form_errors">
+                {% for message in messages %}
+                <strong class="text-{{ message.tags }}">{{ message }}</strong><br>
+    
+                {% endfor %}
+            </div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}
+        <div class="alert alert-info alert-dismissible messages_div" style="display: none;" role="alert">
+            <div class="form_errors">
+              
+            </div>
+            
+        </div>
+        
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form|crispy }}
+       
+          <br>
+          <br>
+          <!--<button type="submit" name="save_config" class="btn btn-info col-3 save_config" value="add"><i class="fa fa-gear"></i>  Save </button>!-->
+          
+      </form>
+      <br>
+          <br>
+      <button type="submit" name="save_config_ajax" class="btn btn-info col-3 save_config_ajax" value="add" disabled><i class="fa fa-gear"></i>  Update Pmta  (js) </button>
+      <br>
+      <br>
+   
+      
+      
+
+
+      <div class="card-group">
+        <div class="card" style="background-color: #fff">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true" style="width: 280px;">PMTA Queue:</a>
+                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false" style="width: 280px;">PMTA Resolve :</a>
+                <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false" style="width: 280px;">PMTA Trace :</a>
+                <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false" style="width: 280px;">PMTA Command :</a>
+                <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false" style="width: 280px;">Delete JobID :</a>
+
+              </div>
+          
+        </div> 
+        <div class="card" style="background-color: rgb(88 124 175 / 21%);" >
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                    <div class="form-check" style="min-height: 2.5rem;padding-left: 2.5em;display: block;margin-bottom: 0.125rem;padding-top: 1.5rem;">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="delete" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          Delete
+                        </label>
+                      </div>
+                      <div class="form-check" style="min-height: 2.5rem;padding-left: 2.5em;display: block;margin-bottom: 0.125rem;padding-top: 0.5rem;">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="pause/resume" >
+                        <label class="form-check-label" for="flexRadioDefault2">
+                          Pause/Resume
+                        </label>
+                      </div>
+                      <div class="form-check" style="min-height: 2.5rem;padding-left: 2.5em;display: block;margin-bottom: 0.125rem;padding-top: 0.5rem;">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value="pause" >
+                        <label class="form-check-label" for="flexRadioDefault3">
+                          Pause
+                        </label>
+                      </div>
+                      <div class="form-check" style="min-height: 2.5rem;padding-left: 2.5em;display: block;margin-bottom: 0.125rem;padding-top: 0.5rem;">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4" value="resume" >
+                        <label class="form-check-label" for="flexRadioDefault4">
+                          Resume
+                        </label>
+                      </div>
+                      <div class="form-check" style="min-height: 2.5rem;padding-left: 2.5em;display: block;margin-bottom: 0.125rem;padding-top: 0.5rem;">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault5" value="schedule" >
+                        <label class="form-check-label" for="flexRadioDefault5">
+                        Schedule
+                        </label>
+                      </div>
+                      <div style="min-height: 5.5rem;padding-left: 1.5em;display: block;margin-bottom: 0.125rem;padding-top: 2.5rem;"><button  type="submit" name="save_config_ajax" class="btn btn-success col-2 run_cmnd" value="add" ><i class="fa fa-gear"></i>  Run </button></div>
+
+                </div>
+                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">amar</div>
+                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">rouch</div>
+                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">test</div>
+              </div>
+        </div>
+      
+      </div>
+      <script>
+          let server1=''
+          let server2=''
+//----------------------------------------------------------//
+          function check_if_selected(var1,var2) {
+              if(server1 != '' && server2 != ''){
+                  return true
+             }else{
+                  return false
+                  }
+          }
+//-----------------------showConfig function-----------------------------------//
+
+            function showConfig() {
+            var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+              $.ajax({ 
+                    type: "POST",
+                    url:'/pmta_config_ajax/',
+                    dataType: "json",
+                    //data: 'action':'get_config',
+                    data: {csrfmiddlewaretoken: csrfToken,
+                    config_p:$('[name="config_p"]').val(),
+                    server:$('[name="server"]').val(),
+                    isp:$('[name="isp"]').val(),
+                    action:'get_config',
+                    },
+                    
+                    success: function(data){
+                        $('[name="config_p"]').val(data.data)
+                        if(data.result){
+                            $('.messages_div').css('display','block');
+                            $(".form_errors").html(" ");
+                          if(data.success){        
+                              $(".form_errors").append("<strong class='text-success''>  "+data.result+"</strong><br>");
+                         }else{
+                              $(".form_errors").append("<strong class='text-danger''>  "+data.result+"</strong><br>");
+                              }
+                        }
+                    }                    
+                }); 
+            }
+//----------------------onchange server------------------------------------//
+
+          $('[name="server"]').on('change', function() {
+              $(".messages_div").hide();
+              $('[name="config_p"]').val('')
+              $("[name='server']").removeClass("is-invalid").removeClass("is-valid");
+              $("p").text("");
+              $("[name='isp']").removeClass("is-invalid").removeClass("is-valid"); 
+              server1=this.value
+              check_if= check_if_selected(server1,server2)
+              if(check_if == true){
+                  showConfig()
+                  $('.save_config_ajax').removeAttr("disabled")
+            }else{
+                $('.save_config_ajax').attr('disabled', 'disabled');
+                 }
+  
+          });
+//----------------------onchange isp------------------------------------//
+        $('[name="isp"]').on('change', function() {
+            $(".messages_div").hide();
+            $('[name="config_p"]').val('')
+            $("[name='server']").removeClass("is-invalid").removeClass("is-valid");
+            $("p").text("");
+            $("[name='isp']").removeClass("is-invalid").removeClass("is-valid"); 
+            server2=this.value
+            check_if= check_if_selected(server1,server2)
+            if(check_if == true){
+                showConfig()
+                $('.save_config_ajax').removeAttr("disabled")
+            }else{
+                $('.save_config_ajax').attr('disabled', 'disabled');
+                 }
+        });
+ 
+//----------------------button save config ------------------------------------//
+          $(".save_config_ajax").click(function(){
+              $(".save_config_ajax").text("")
+              $(".save_config_ajax").html("<i class='fa fa-gear fa-spin'></i>  Loading ...");
+              $(".form_errors").html("");
+              $(".messages_div").show();          
+              $("[name='server']").removeClass("is-invalid").removeClass("is-valid");
+              $("p").text("");
+              $("[name='isp']").removeClass("is-invalid").removeClass("is-valid"); 
+              var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+              $.ajax({ 
+                    type: "POST",
+                    url:'/pmta_config_ajax/',
+                    dataType: "json",         
+                    data: {csrfmiddlewaretoken: csrfToken,
+                    config_p:$('[name="config_p"]').val(),
+                    server:$('[name="server"]').val(),
+                    isp:$('[name="isp"]').val(),
+                    action:'save_config',
+                    },
+                    
+       
+                    success: function(data){
+                        $(".save_config_ajax").text("")
+                        $(".save_config_ajax").html("<i class='fa fa-gear'></i> Update Pmta  (js)");                      
+                        if (data.error_form){
+                            const obj = JSON.parse(data.data);
+                            for (const [name, value] of Object.entries(obj)){
+                           
+                                var $input = $("[name='"+ name +"']");
+                                $input.nextAll('p').empty();
+                                $input.after("<p style='color: red;'>" + value[0].message + "</p>");                             
+                                $input.addClass("is-invalid");
+                            }
+                        }else{                    
+                        $('[name="config_p"]').val(data.data)
+                        console.log(data)
+                        if(data.success){                         
+                            $(".form_errors").append("<strong class='text-success''>  "+data.result+"</strong><br>");
+                       }else{
+                            $(".form_errors").append("<strong class='text-danger''>  "+data.result+"</strong><br>");
+                        }
+                        }
+                    },                   
+               }); 
+
+            });
+//----------------------Run cmnd ------------------------------------//
+$(".run_cmnd").click(function(){
+    console.log("run_cmnd clicked")
+    console.log($('input[name="flexRadioDefault"]:checked').val())
+    var cmnds =$('input[name="flexRadioDefault"]:checked').val();
+    var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+              $.ajax({ 
+                    type: "POST",
+                    url:'/pmta_config_ajax/',
+                    dataType: "json",
+                    //data: 'action':'get_config',
+                    data: {csrfmiddlewaretoken: csrfToken,
+                    config_p:$('[name="config_p"]').val(),
+                    server:$('[name="server"]').val(),
+                    isp:$('[name="isp"]').val(),
+                    cmnds:$('input[name="flexRadioDefault"]:checked').val(),
+                    action:'pmta_cmnds',
+                    },
+                    
+                    success: function(data){
+                console.log("success")
+                if (data.error_form){
+                            const obj = JSON.parse(data.data);
+                            for (const [name, value] of Object.entries(obj)){
+                           
+                                var $input = $("[name='"+ name +"']");
+                                $input.nextAll('p').empty();
+                                $input.after("<p style='color: red;'>" + value[0].message + "</p>");                             
+                                $input.addClass("is-invalid");
+                            }
+                        }else{                    
+                        
+                        if(data.success){                         
+                            $(".form_errors").append("<strong class='text-success''>  "+data.result+"</strong><br>");
+                       }else{
+                        $(".form_errors").text("");
+                        $(".form_errors").append("<strong class='text-danger''>Issue run cmnd :   "+data.result+"</strong><br>");
+                            
+                        }
+                        }
+                    }                    
+                }); 
+            });
+
+      </script>
+      
+    
+  
+     
+     
+
+      {% endblock %}
+      
+        
+        
+        
+       
+        
+        
